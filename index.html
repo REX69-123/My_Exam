@@ -1,0 +1,1028 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-PORTFOLIO // REX DEL CIELO R. SALIBAY</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap');
+
+        :root {
+            --bg-light: #f8fafc;
+            --panel-bg: rgba(255, 255, 255, 0.95);
+            --panel-hover: rgba(241, 245, 249, 0.98);
+            --accent-navy: #0f172a;
+            --accent-teal: #0284c7;
+            --accent-emerald: #059669;
+            --border-light: #e2e8f0;
+            --border-highlight: rgba(2, 132, 199, 0.3);
+            --text-main: #1e293b;
+            --text-muted: #475569;
+            --font-main: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-code: 'JetBrains Mono', monospace;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-main);
+            background: var(--bg-light);
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Fixed 3D Canvas Background */
+        #canvas-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        /* Header Nav */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.94);
+            backdrop-filter: blur(12px);
+            padding: 16px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            border-bottom: 1px solid var(--border-light);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .brand {
+            font-family: var(--font-code);
+            font-size: 0.9rem;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            color: var(--accent-navy);
+            text-transform: uppercase;
+        }
+
+        .nav-group {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .nav-btn {
+            font-family: var(--font-main);
+            background: #ffffff;
+            border: 1px solid var(--border-light);
+            color: var(--text-main);
+            padding: 7px 14px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+        }
+
+        .nav-btn:hover {
+            background: var(--accent-navy);
+            color: #ffffff;
+            border-color: var(--accent-navy);
+            transform: translateY(-1px);
+        }
+
+        /* Cover Page Section */
+        .cover-section {
+            position: relative;
+            z-index: 10;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 110px 20px 60px;
+            background: radial-gradient(circle at top center, rgba(2, 132, 199, 0.08) 0%, transparent 70%);
+        }
+
+        .cover-card {
+            max-width: 850px;
+            width: 100%;
+            background: var(--panel-bg);
+            border: 1px solid var(--border-highlight);
+            border-radius: 16px;
+            box-shadow: 0 15px 35px rgba(15, 23, 42, 0.08);
+            padding: 48px 36px;
+            backdrop-filter: blur(16px);
+            text-align: center;
+        }
+
+        .avatar-wrapper {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            background: linear-gradient(135deg, var(--accent-navy), var(--accent-teal));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-code);
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #ffffff;
+            box-shadow: 0 10px 20px rgba(2, 132, 199, 0.2);
+            border: 3px solid #ffffff;
+        }
+
+        .profile-name {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: var(--accent-navy);
+            letter-spacing: -0.5px;
+            margin-bottom: 6px;
+        }
+
+        .profile-title {
+            font-family: var(--font-code);
+            font-size: 0.95rem;
+            color: var(--accent-teal);
+            font-weight: 700;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+
+        .profile-bio {
+            color: var(--text-muted);
+            font-size: 0.98rem;
+            max-width: 680px;
+            margin: 0 auto 28px;
+        }
+
+        .meta-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+            gap: 16px;
+            border-top: 1px solid var(--border-light);
+            padding-top: 24px;
+            margin-top: 10px;
+        }
+
+        .meta-item {
+            text-align: center;
+        }
+
+        .meta-label {
+            font-family: var(--font-code);
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            color: var(--accent-teal);
+            letter-spacing: 1px;
+        }
+
+        .meta-value {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-main);
+            margin-top: 4px;
+        }
+
+        /* Table of Contents Section */
+        .toc-card {
+            background: #f1f5f9;
+            border: 1px solid var(--border-light);
+            border-radius: 12px;
+            padding: 24px 28px;
+            margin-top: 32px;
+            text-align: left;
+        }
+
+        .toc-title {
+            font-family: var(--font-code);
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--accent-navy);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 14px;
+        }
+
+        .toc-list {
+            list-style: none;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 10px;
+        }
+
+        .toc-list a {
+            text-decoration: none;
+            color: var(--accent-teal);
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: color 0.2s;
+        }
+
+        .toc-list a:hover {
+            color: var(--accent-navy);
+            text-decoration: underline;
+        }
+
+        /* Main Content Area */
+        main {
+            position: relative;
+            z-index: 10;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px 80px;
+        }
+
+        .section-title {
+            font-family: var(--font-code);
+            font-size: 1.35rem;
+            font-weight: 700;
+            margin-bottom: 24px;
+            color: var(--accent-navy);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .section-title::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--border-light);
+        }
+
+        .content-card {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-light);
+            border-left: 4px solid var(--accent-teal);
+            border-radius: 12px;
+            padding: 32px;
+            margin-bottom: 40px;
+            scroll-margin-top: 100px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+            backdrop-filter: blur(12px);
+        }
+
+        .artifact-block {
+            margin-bottom: 36px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .artifact-block:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .artifact-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 8px;
+        }
+
+        .artifact-title {
+            font-size: 1.15rem;
+            color: var(--accent-teal);
+            font-weight: 700;
+        }
+
+        .file-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #e0f2fe;
+            color: #0369a1;
+            border: 1px solid #bae6fd;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-family: var(--font-code);
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .file-chip:hover {
+            background: #0284c7;
+            color: #ffffff;
+            border-color: #0284c7;
+        }
+
+        .artifact-desc {
+            color: var(--text-main);
+            font-size: 0.95rem;
+            margin-bottom: 14px;
+            font-weight: 500;
+        }
+
+        .reflection-box {
+            background: #f1f5f9;
+            border-radius: 8px;
+            padding: 16px 20px;
+            border: 1px solid #e2e8f0;
+            margin-top: 12px;
+        }
+
+        .reflection-heading {
+            font-family: var(--font-code);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            color: var(--accent-navy);
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        ul.reflection-list {
+            list-style: none;
+        }
+
+        ul.reflection-list li {
+            position: relative;
+            padding-left: 20px;
+            color: var(--text-muted);
+            font-size: 0.92rem;
+            margin-bottom: 8px;
+            line-height: 1.5;
+        }
+
+        ul.reflection-list li::before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: var(--accent-emerald);
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        ul.reflection-list li strong {
+            color: var(--text-main);
+        }
+
+        /* Table */
+        .table-wrapper {
+            overflow-x: auto;
+            margin-top: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 0.9rem;
+        }
+
+        th,
+        td {
+            padding: 14px 16px;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        th {
+            font-family: var(--font-code);
+            background: #f1f5f9;
+            color: var(--accent-navy);
+            font-weight: 700;
+            font-size: 0.8rem;
+            letter-spacing: 0.5px;
+        }
+
+        tr:hover {
+            background: var(--panel-hover);
+        }
+
+        .essay-q {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: var(--accent-navy);
+            margin-top: 24px;
+            margin-bottom: 8px;
+        }
+
+        .essay-a {
+            color: var(--text-muted);
+            font-size: 0.98rem;
+            margin-bottom: 20px;
+            text-align: justify;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- 3D Canvas Background -->
+    <div id="canvas-container"></div>
+
+    <!-- Header Navigation -->
+    <header>
+        <div class="brand">E-PORTFOLIO // REX DEL CIELO R. SALIBAY</div>
+        <div class="nav-group">
+            <button class="nav-btn" onclick="scrollToSection('cover')">Cover Page</button>
+            <button class="nav-btn" onclick="scrollToSection('toc')">Contents</button>
+            <button class="nav-btn" onclick="scrollToSection('first-term')">First Term</button>
+            <button class="nav-btn" onclick="scrollToSection('midterm')">Midterm</button>
+            <button class="nav-btn" onclick="scrollToSection('finals')">Finals</button>
+            <button class="nav-btn" onclick="scrollToSection('matrix')">Matrix</button>
+            <button class="nav-btn" onclick="scrollToSection('essay')">Essay</button>
+        </div>
+    </header>
+
+    <!-- Section 1: Cover Page -->
+    <section id="cover" class="cover-section">
+        <div class="cover-card">
+            <div class="avatar-wrapper">RS</div>
+            <h1 class="profile-name">Rex Del Cielo R. Salibay</h1>
+            <p class="profile-title">BSIT 3A // Reflective E-Portfolio Requirement</p>
+            <p class="profile-bio">
+                A chronological compilation of learning outputs, technical activities, and personal reflections for
+                <strong>ITELECT1.23 – Elective 1 (Lec)</strong> (First Semester AY 2026–2027). Demonstrating academic
+                growth and connecting educational principles to Information Technology practice.
+            </p>
+
+            <div class="meta-grid">
+                <div class="meta-item">
+                    <div class="meta-label">Student Name</div>
+                    <div class="meta-value">Rex Del Cielo R. Salibay</div>
+                </div>
+                <div class="meta-item">
+                    <div class="meta-label">Course & Section</div>
+                    <div class="meta-value">ITELECT1.23 - BSIT 3A</div>
+                </div>
+                <div class="meta-item">
+                    <div class="meta-label">Instructor</div>
+                    <div class="meta-value">Angel Jane Ganancial</div>
+                </div>
+                <div class="meta-item">
+                    <div class="meta-label">Academic Term</div>
+                    <div class="meta-value">First Semester 2026-2027</div>
+                </div>
+            </div>
+
+            <!-- Table of Contents Container -->
+            <div id="toc" class="toc-card">
+                <div class="toc-title">Table of Contents (Chronological Navigation)</div>
+                <ul class="toc-list">
+                    <li><a href="#first-term">1. First Term Deliverables (TLA 1 - TLA 3)</a></li>
+                    <li><a href="#midterm">2. Midterm Deliverables (Midterm TLA 1 - TLA 4)</a></li>
+                    <li><a href="#finals">3. Final Term Deliverables (Saibay_AT3 - Salibay_TLA4)</a></li>
+                    <li><a href="#matrix">4. Summary Deliverables Matrix</a></li>
+                    <li><a href="#essay">5. Comprehensive Final Reflection Essay</a></li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Section -->
+    <main>
+
+        <!-- First Term Section -->
+        <section id="first-term">
+            <h2 class="section-title">01 // First Term Outputs (Chronological)</h2>
+            <div class="content-card">
+
+                <!-- Output 1 -->
+                <div class="artifact-block">
+                    <div class="artifact-header">
+                        <h3 class="artifact-title">TLA 1 – Learning Styles (The Learner)</h3>
+                        <a href="salibay_tla1.pdf" target="_blank" class="file-chip">📄 View File: salibay_tla1.pdf</a>
+                    </div>
+                    <p class="artifact-desc">Profiling learner modalities (Visual/Achilles, Kinesthetic/Odysseus,
+                        Musical/Travis) and proposing concrete learning barriers and solutions.</p>
+                    <div class="reflection-box">
+                        <div class="reflection-heading">Personal Reflection</div>
+                        <ul class="reflection-list">
+                            <li><strong>What I Learned:</strong> I identified that I learn best visually and
+                                kinesthetically, meaning I understand programming logic faster when I draw mind maps and
+                                write code hands-on rather than just listening to lectures.</li>
+                            <li><strong>Challenges Encountered:</strong> It was challenging to objectively analyze my
+                                own learning barriers without assuming I learn equally well across all learning styles.
+                            </li>
+                            <li><strong>How I Applied It:</strong> I began color-coding my notes and drawing flowchart
+                                diagrams before coding, which made my debugging process much faster.</li>
+                            <li><strong>Contribution to Development:</strong> It helped me build self-awareness on how
+                                to study complex technical concepts efficiently.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Output 2 -->
+                <div class="artifact-block">
+                    <div class="artifact-header">
+                        <h3 class="artifact-title">TLA 2 – Teaching Philosophy & Professional Reflection Paper</h3>
+                        <a href="Salibay_TLA2.pdf" target="_blank" class="file-chip">📄 View File: Salibay_TLA2.pdf</a>
+                    </div>
+                    <p class="artifact-desc">Written paper examining teacher character traits, digital ethics, privacy,
+                        and proactive classroom management strategies.</p>
+                    <div class="reflection-box">
+                        <div class="reflection-heading">Personal Reflection</div>
+                        <ul class="reflection-list">
+                            <li><strong>What I Learned:</strong> I learned that Constructivism and professional ethics
+                                align directly with IT development—learning occurs through building, failing, and
+                                maintaining privacy and integrity.</li>
+                            <li><strong>Challenges Encountered:</strong> Articulating abstract educational philosophy in
+                                my own words while maintaining professional writing standards.</li>
+                            <li><strong>How I Applied It:</strong> I adopted an active building mindset when learning
+                                new coding tools and prioritized student data privacy concepts in my project designs.
+                            </li>
+                            <li><strong>Contribution to Development:</strong> Reinforced my belief that being a
+                                competent IT specialist requires continuous, hands-on self-directed learning and ethical
+                                responsibility.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Output 3 -->
+                <div class="artifact-block">
+                    <div class="artifact-header">
+                        <h3 class="artifact-title">TLA 3 – Reflection Paper & Summative Assessment</h3>
+                        <a href="Salibay_TLA2.pdf" target="_blank" class="file-chip">📄 View File: TLA 3 Reflection</a>
+                    </div>
+                    <p class="artifact-desc">Synthesis of psychological principles of learning, focusing on Thorndike's
+                        Laws of Learning (Law of Readiness, Law of Exercise, Law of Effect).</p>
+                    <div class="reflection-box">
+                        <div class="reflection-heading">Personal Reflection</div>
+                        <ul class="reflection-list">
+                            <li><strong>What I Learned:</strong> I discovered that Thorndike's Law of Effect directly
+                                applies to UI/UX design—instant, positive feedback reinforces user actions and builds
+                                smooth interaction habits.</li>
+                            <li><strong>Challenges Encountered:</strong> Connecting abstract psychological laws directly
+                                to concrete software user interface feedback loops.</li>
+                            <li><strong>How I Applied It:</strong> I began implementing immediate visual confirmations
+                                (such as success toasts and clear color changes) in my user interface projects.</li>
+                            <li><strong>Contribution to Development:</strong> It taught me to always consider human
+                                cognitive feedback when designing IT systems.</li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Midterm Section -->
+        <section id="midterm">
+            <h2 class="section-title">02 // Midterm Outputs (Chronological)</h2>
+            <div class="content-card">
+
+                <!-- Midterm Output 1 -->
+                <div class="artifact-block">
+                    <div class="artifact-header">
+                        <h3 class="artifact-title">Midterm TLA 1 – Translating Learning Principles into EdTech Solutions
+                        </h3>
+                        <a href="Salibay.pdf" target="_blank" class="file-chip">📄 View File: Salibay.pdf (EdTech
+                            Wireframe)</a>
+                    </div>
+                    <p class="artifact-desc">Design of an interactive 3-screen Array simulator applying Thorndike's Laws
+                        of Learning and John Dewey's active inquiry loop.</p>
+                    <div class="reflection-box">
+                        <div class="reflection-heading">Personal Reflection</div>
+                        <ul class="reflection-list">
+                            <li><strong>What I Learned:</strong> I learned how to use Screen 1 as a "Meaning Bridge" to
+                                prepare student cognitive readiness before introducing zero-based array indexing in
+                                Screen 2.</li>
+                            <li><strong>Challenges Encountered:</strong> Designing error management that guides learners
+                                empathetically without using discouraging red alerts.</li>
+                            <li><strong>How I Applied It:</strong> I built interactive visual cues that allow novice
+                                students to test zero-based index buttons and observe immediate memory address feedback.
+                            </li>
+                            <li><strong>Contribution to Development:</strong> Improved my UI/UX prototyping skills by
+                                grounding visual design in cognitive load theory.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Midterm Output 2 -->
+                <div class="artifact-block">
+                    <div class="artifact-header">
+                        <h3 class="artifact-title">AT 1 (Midterm) – Formulating Learning Objectives</h3>
+                        <a href="REX DEL CIELO R. SALIBAY - AT 1 (Midterm) - Formulating Learning Objective (1).pdf"
+                            target="_blank" class="file-chip">📄 View File: AT 1 Formulating Objectives</a>
+                    </div>
+                    <p class="artifact-desc">Translating vague ideas into SMART learning objectives across ERD
+                        normalization, Escape From Tarkov CQB tactics, and log file security vulnerability mitigation.
+                    </p>
+                    <div class="reflection-box">
+                        <div class="reflection-heading">Personal Reflection</div>
+                        <ul class="reflection-list">
+                            <li><strong>What I Learned:</strong> I learned that setting clear SMART objectives
+                                (Specific, Measurable, Achievable, Relevant, Time-bound) is essential for evaluating
+                                performance accurately.</li>
+                            <li><strong>Challenges Encountered:</strong> Writing exact, measurable criteria for
+                                subjective tasks like security log audits and tactical awareness.</li>
+                            <li><strong>How I Applied It:</strong> I started defining clear project deliverables and
+                                strict time limits for my coding milestones.</li>
+                            <li><strong>Contribution to Development:</strong> Enhanced my project management and
+                                goal-setting discipline.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Midterm Output 3 -->
+                <div class="artifact-block">
+                    <div class="artifact-header">
+                        <h3 class="artifact-title">AT 2 & TLA 2 – Content Analysis, Selection & Sequencing Task</h3>
+                        <a href="Saibay.pdf" target="_blank" class="file-chip">📄 View File: Saibay.pdf (Content
+                            Sequencing)</a>
+                    </div>
+                    <p class="artifact-desc">Critique of a flawed 5-day curriculum outline and reorganization into a
+                        simple-to-complex prerequisite sequence.</p>
+                    <div class="reflection-box">
+                        <div class="reflection-heading">Personal Reflection</div>
+                        <ul class="reflection-list">
+                            <li><strong>What I Learned:</strong> I learned that teaching complex curriculum critiques on
+                                Day 1 before teaching basic concepts violates prerequisite sequencing and causes
+                                cognitive overload.</li>
+                            <li><strong>Challenges Encountered:</strong> Justifying why specific topic rearrangements
+                                were logically necessary for student retention.</li>
+                            <li><strong>How I Applied It:</strong> I restructured my personal study plan to master
+                                foundational syntax before attempting complex software design patterns.</li>
+                            <li><strong>Contribution to Development:</strong> Sharpened my analytical thinking regarding
+                                how information should be ordered for efficient learning.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Midterm Output 4 -->
+                <div class="artifact-block">
+                    <div class="artifact-header">
+                        <h3 class="artifact-title">TLA 3 & 4 – Strategy Blueprint & Classroom Environment Design</h3>
+                        <a href="SaIibay.pdf" target="_blank" class="file-chip">📄 View File: SaIibay.pdf (Classroom
+                            Floor Plan)</a>
+                    </div>
+                    <p class="artifact-desc">Architectural blueprint of a zoned classroom layout featuring clear
+                        emergency transit paths, collaboration hubs, and quiet study areas.</p>
+                    <div class="reflection-box">
+                        <div class="reflection-heading">Personal Reflection</div>
+                        <ul class="reflection-list">
+                            <li><strong>What I Learned:</strong> I learned that physical spatial layout directly impacts
+                                learning behavior—zoning areas for group collaboration and quiet study improves focus
+                                and safety.</li>
+                            <li><strong>Challenges Encountered:</strong> Ensuring clear lines of sight from the
+                                teacher's desk while keeping furniture accessible for mobility-impaired students.</li>
+                            <li><strong>How I Applied It:</strong> I organized my digital desktop workspace and physical
+                                coding environment to eliminate distractions during long study blocks.</li>
+                            <li><strong>Contribution to Development:</strong> Taught me how environment design
+                                influences focus, safety, and productivity.</li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Final Term Section -->
+        <section id="finals">
+            <h2 class="section-title">03 // Final Term Outputs (Chronological)</h2>
+            <div class="content-card">
+
+                <!-- Final Output 1 -->
+                <div class="artifact-block">
+                    <div class="artifact-header">
+                        <h3 class="artifact-title">AT 3 & TLA 1 Finals – Instructional Material Evaluation & Plan</h3>
+                        <a href="Saibay_AT3.pdf" target="_blank" class="file-chip">📄 View File: Saibay_AT3.pdf</a>
+                    </div>
+                    <p class="artifact-desc">Evaluation of a Photosynthesis educational video across alignment,
+                        pedagogical appropriateness, accessibility, and interactive design.</p>
+                    <div class="reflection-box">
+                        <div class="reflection-heading">Personal Reflection</div>
+                        <ul class="reflection-list">
+                            <li><strong>What I Learned:</strong> I learned that digital instructional materials require
+                                strong accessibility features like subtitles, playback speed control, and color-coded
+                                diagrams.</li>
+                            <li><strong>Challenges Encountered:</strong> Identifying technical gaps in media materials
+                                and proposing practical interactive improvements like drag-and-drop tasks.</li>
+                            <li><strong>How I Applied It:</strong> I incorporated high-contrast visual structures and
+                                clear step-by-step layouts into my software user guide documentation.</li>
+                            <li><strong>Contribution to Development:</strong> Enhanced my ability to evaluate digital
+                                learning tools and design user-friendly technical content.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Final Output 2 -->
+                <div class="artifact-block">
+                    <div class="artifact-header">
+                        <h3 class="artifact-title">TLA 1 Finals – Interactive Slide Deck Lesson Plan</h3>
+                        <a href="Saibay_TA1.pdf" target="_blank" class="file-chip">📄 View File: Saibay_TA1.pdf</a>
+                    </div>
+                    <p class="artifact-desc">Step-by-step design of a Grade 7 Science interactive slide deck with
+                        outcome alignment, matching exercises, and prototype layouts.</p>
+                    <div class="reflection-box">
+                        <div class="reflection-heading">Personal Reflection</div>
+                        <ul class="reflection-list">
+                            <li><strong>What I Learned:</strong> I learned how to structure interactive slide content
+                                with clear input/output visuals and built-in practice activities to check understanding.
+                            </li>
+                            <li><strong>Challenges Encountered:</strong> Balancing clear, age-appropriate explanations
+                                with interactive drag-and-drop tasks without overcrowding the slides.</li>
+                            <li><strong>How I Applied It:</strong> I structured technical presentations into short,
+                                modular slides featuring visual anchors and interactive check-ins.</li>
+                            <li><strong>Contribution to Development:</strong> Sharpened my skill in creating engaging,
+                                well-structured digital presentation slides.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Final Output 3 -->
+                <div class="artifact-block">
+                    <div class="artifact-header">
+                        <h3 class="artifact-title">TLA 2 Finals – Philosophy of Assessment</h3>
+                        <a href="Salibay_TLA2_2.pdf" target="_blank" class="file-chip">📄 View File:
+                            Salibay_TLA2_2.pdf</a>
+                    </div>
+                    <p class="artifact-desc">Framework establishing fair, valid, and transparent assessments as
+                        diagnostic roadmaps for growth rather than punitive grading.</p>
+                    <div class="reflection-box">
+                        <div class="reflection-heading">Personal Reflection</div>
+                        <ul class="reflection-list">
+                            <li><strong>What I Learned:</strong> I learned that assessment acts as a roadmap to pinpoint
+                                knowledge gaps early and scaffold student progress without penalizing initial failure.
+                            </li>
+                            <li><strong>Challenges Encountered:</strong> Formulating transparent rubric standards that
+                                evaluate learner effort and critical thinking alongside final results.</li>
+                            <li><strong>How I Applied It:</strong> I used iterative code reviews and self-checklists to
+                                monitor project progress continuously during development.</li>
+                            <li><strong>Contribution to Development:</strong> Developed an appreciative mindset toward
+                                constructive feedback and continuous improvement.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Final Output 4 -->
+                <div class="artifact-block">
+                    <div class="artifact-header">
+                        <h3 class="artifact-title">TLA 3 Finals – Classroom Management Plan & Discipline Matrix</h3>
+                        <a href="Salibay_TLA3.pdf" target="_blank" class="file-chip">📄 View File: Salibay_TLA3.pdf</a>
+                    </div>
+                    <p class="artifact-desc">A 60-minute lesson structure, 4-step transition formula, and proactive
+                        discipline matrix for Grade 10 IT high school students.</p>
+                    <div class="reflection-box">
+                        <div class="reflection-heading">Personal Reflection</div>
+                        <ul class="reflection-list">
+                            <li><strong>What I Learned:</strong> I learned how to design a structured 60-minute lesson
+                                plan with clear entry routines, transition cues, and restorative discipline strategies.
+                            </li>
+                            <li><strong>Challenges Encountered:</strong> Creating fair corrective actions for off-task
+                                phone use and chronic tardiness while preserving student dignity.</li>
+                            <li><strong>How I Applied It:</strong> I adopted timed routines and structured step-by-step
+                                procedures to manage group project tasks effectively.</li>
+                            <li><strong>Contribution to Development:</strong> Prepared me for leadership roles and team
+                                management in collaborative IT environments.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Final Output 5 -->
+                <div class="artifact-block">
+                    <div class="artifact-header">
+                        <h3 class="artifact-title">TLA 4 Finals – Questioning Techniques & Purposeful Homework</h3>
+                        <a href="Salibay_TLA4.pdf" target="_blank" class="file-chip">📄 View File: Salibay_TLA4.pdf</a>
+                    </div>
+                    <p class="artifact-desc">Philosophy advocating for Purposeful Homework and the Questioning Staircase
+                        (Divergent Questioning, Wait Time I & II, Constructive Probing).</p>
+                    <div class="reflection-box">
+                        <div class="reflection-heading">Personal Reflection</div>
+                        <ul class="reflection-list">
+                            <li><strong>What I Learned:</strong> I learned that replacing repetitive drill homework with
+                                purposeful real-world tasks and applying Wait Time I & II encourages deeper cognitive
+                                engagement.</li>
+                            <li><strong>Challenges Encountered:</strong> Practicing systematic pauses (Wait Time) before
+                                calling on learners without jumping in prematurely.</li>
+                            <li><strong>How I Applied It:</strong> I started using divergent questioning during peer
+                                discussions to explore multiple valid programming solutions.</li>
+                            <li><strong>Contribution to Development:</strong> Built my confidence in leading technical
+                                discussions and asking effective, higher-order questions.</li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Section 4: Matrix -->
+        <section id="matrix">
+            <h2 class="section-title">04 // Summary Deliverables Matrix</h2>
+            <div class="content-card">
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Term</th>
+                                <th>Deliverable Title</th>
+                                <th>Core Concept</th>
+                                <th>IT & CS Application</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>First Term</td>
+                                <td>TLA 1 – Learning Styles</td>
+                                <td>Cognitive Modalities</td>
+                                <td>Visual code mapping & debugging workflow.</td>
+                            </tr>
+                            <tr>
+                                <td>First Term</td>
+                                <td>TLA 2 – Teaching Philosophy</td>
+                                <td>Constructivism & Ethics</td>
+                                <td>Hands-on iterative software engineering & privacy.</td>
+                            </tr>
+                            <tr>
+                                <td>First Term</td>
+                                <td>TLA 3 – Reflection Paper</td>
+                                <td>Laws of Learning</td>
+                                <td>Reinforcing user UI/UX feedback loops.</td>
+                            </tr>
+                            <tr>
+                                <td>Midterm</td>
+                                <td>Midterm TLA 1 – EdTech Solutions</td>
+                                <td>Cognitive Ergonomics</td>
+                                <td>Reducing operational friction in UI layouts.</td>
+                            </tr>
+                            <tr>
+                                <td>Midterm</td>
+                                <td>AT 1 – Formulating Objectives</td>
+                                <td>SMART Objectives</td>
+                                <td>Structuring sprint goals and backlog epics.</td>
+                            </tr>
+                            <tr>
+                                <td>Midterm</td>
+                                <td>AT 2 / TLA 2 – Content Sequencing</td>
+                                <td>Prerequisite Sequencing</td>
+                                <td>Ordering curriculum and study modules.</td>
+                            </tr>
+                            <tr>
+                                <td>Midterm</td>
+                                <td>TLA 3 / TLA 4 – Spatial Blueprint</td>
+                                <td>Inquiry Loops & Space Design</td>
+                                <td>Building distraction-free workspace setups.</td>
+                            </tr>
+                            <tr>
+                                <td>Final Term</td>
+                                <td>AT 3 / TLA 1 Finals – Media Design</td>
+                                <td>Accessibility & Visual Layouts</td>
+                                <td>Evaluating EdTech videos & slide decks.</td>
+                            </tr>
+                            <tr>
+                                <td>Final Term</td>
+                                <td>TLA 2 Finals – Assessment Philosophy</td>
+                                <td>Formative Roadmap</td>
+                                <td>Iterative code reviews & growth mindset.</td>
+                            </tr>
+                            <tr>
+                                <td>Final Term</td>
+                                <td>TLA 3 Finals – Classroom Management</td>
+                                <td>Routine & Governance</td>
+                                <td>Team management & restorative discipline.</td>
+                            </tr>
+                            <tr>
+                                <td>Final Term</td>
+                                <td>TLA 4 Finals – Questioning Techniques</td>
+                                <td>Questioning Staircase & Pause</td>
+                                <td>Higher-order technical communication.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 5: Essay -->
+        <section id="essay">
+            <h2 class="section-title">05 // Comprehensive Final Reflection Essay</h2>
+            <div class="content-card">
+                <div class="essay-q">1. How has this subject helped you as an IT/CS student?</div>
+                <p class="essay-a">
+                    This course provided a fundamental perspective shift by bridging software engineering with cognitive
+                    ergonomics and instructional design. As a BSIT student, my technical education often focused
+                    primarily on writing code syntax, configuring databases, and building back-end logic. However, this
+                    course demonstrated that software is ultimately built for human interaction. Learning about
+                    cognitive load, structured goal setting, learning styles, and accessibility showed me how to design
+                    software applications that are intuitive, easy to adopt, and cognitively accessible for all users.
+                </p>
+
+                <div class="essay-q">2. What significant knowledge, skills, attitudes, or values have you gained from
+                    the subject?</div>
+                <p class="essay-a">
+                    I acquired a thorough understanding of Bloom's Taxonomy, Cognitive Load Theory, Thorndike's Laws of
+                    Learning, and structured workspace design. On a skill level, I mastered breaking complex systems
+                    into modular steps and communicating technical ideas clearly. Most importantly, I developed an
+                    attitude of empathy in system design—realizing that technology should adjust to human cognitive
+                    limits rather than forcing users to adapt to confusing software.
+                </p>
+
+                <div class="essay-q">3. How can you apply what you have learned to your academic life, future workplace,
+                    and professional responsibilities?</div>
+                <p class="essay-a">
+                    In my academic studies, I use content sequencing to digest complex computer science subjects
+                    systematically. In my future IT career, I will apply these skills to write clean technical
+                    documentation, run productive sprint retrospectives, and explain technical software architecture
+                    easily to non-technical client stakeholders.
+                </p>
+
+                <div class="essay-q">4. How has this subject influenced or helped you develop your future career path?
+                </div>
+                <p class="essay-a">
+                    This course showed me how important it is to be a technical professional who also understands human
+                    communication and system usability. It sparked my interest in career paths like Solutions Architect,
+                    UI/UX Systems Designer, and Technical Project Manager, proving that great IT leaders need both
+                    coding skills and clear communication abilities.
+                </p>
+
+                <div class="essay-q">5. What specific lessons from this subject will you carry with you as a future
+                    IT/CS professional?</div>
+                <p class="essay-a">
+                    The main lesson I will always carry with me is the habit of breaking big problems into smaller,
+                    sequential steps while maintaining open feedback loops. Specific coding languages and tools will
+                    change over time, but knowing how to learn quickly, structure projects clearly, and communicate
+                    ideas effectively will always be useful in the IT industry.
+                </p>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Three.js 3D Background Script -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        const container = document.getElementById('canvas-container');
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        container.appendChild(renderer.domElement);
+
+        const gridHelper = new THREE.GridHelper(60, 40, 0x0284c7, 0xe2e8f0);
+        gridHelper.position.y = -6;
+        scene.add(gridHelper);
+
+        const geometry = new THREE.IcosahedronGeometry(2.5, 1);
+        const material = new THREE.MeshBasicMaterial({ color: 0x0284c7, wireframe: true, transparent: true, opacity: 0.35 });
+        const coreNode = new THREE.Mesh(geometry, material);
+        coreNode.position.set(0, 0, -2);
+        scene.add(coreNode);
+
+        const particleGeo = new THREE.BufferGeometry();
+        const count = 250;
+        const posArray = new Float32Array(count * 3);
+
+        for (let i = 0; i < count * 3; i++) {
+            posArray[i] = (Math.random() - 0.5) * 40;
+        }
+
+        particleGeo.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+        const particleMat = new THREE.PointsMaterial({
+            size: 0.07,
+            color: 0x059669,
+            transparent: true,
+            opacity: 0.5
+        });
+
+        const particles = new THREE.Points(particleGeo, particleMat);
+        scene.add(particles);
+
+        camera.position.z = 8;
+
+        function animate() {
+            requestAnimationFrame(animate);
+            coreNode.rotation.x += 0.002;
+            coreNode.rotation.y += 0.004;
+            particles.rotation.y -= 0.0008;
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        function scrollToSection(id) {
+            const el = document.getElementById(id);
+            if (el) {
+                el.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+    </script>
+</body>
+
+</html>
